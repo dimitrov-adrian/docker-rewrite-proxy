@@ -1,0 +1,51 @@
+version: "2.4"
+
+services:
+    proxy:
+        restart: unless-stopped
+        build: ../
+        ports:
+            - "${HTTP_PORT:-380}:80"
+            - "${HTTPS_PORT:-3443}:443"
+            - "9002:9000"
+        environment:
+            TZ: GMT
+            REWRITE_1: 'web       .*\.www.loc'
+            REWRITE_2: 'web .*\.ww0\.local(host)?'
+            REWRITE_3: 'web2 .*\.w2\.(local|localhost)'
+            REWRITE_4: "websocketecho\tws.*"
+            REWRITE_1001: 'fallback fall back'
+            REWRITE_1001: "fallback .*"
+            REWRITE_9001: 'ftp://ftpexample.com:21 ftp.*'
+            REWRITE_9002: 'ajp://tomcat tomcat.*                    .*testajp.*'
+            REWRITE_9002: 'ajp://tomcat tomcat\..*'
+            REWRITE_9003: "fcgi://phpfpm:4000/  .*php-fpm.*"
+            REWRITE_9005: " web          "
+            # REWRITE_9000: ""
+            SERVER_INFO_ENDPOINT: "/.server/info"
+            SERVER_STATUS_ENDPOINT: "/.server_status"
+            ENABLE_JSON_LOG: 1
+        volumes:
+            - "../rootfs/etc/apache2/httpd.conf:/etc/apache2/httpd.conf"
+            - "../rootfs/var/www/ssl:/var/www/ssl"
+            - "../rootfs/docker-entrypoint.sh:/docker-entrypoint.sh"
+            - "./.htaccess:/var/www/proxy/.htaccess"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+    web1:
+        image: nginxdemos/hello:plain-text
+        hostname: h-srv-w1
+    web2:
+        image: nginxdemos/hello:plain-text
+        hostname: h-srv-w2
+    web3:
+        image: nginxdemos/hello:plain-text
+        hostname: h-srv-w3
+    fallback:
+        image: nginxdemos/hello:plain-text
+        hostname: fallback
+    websocketecho:
+        image: jmalloc/echo-server
+        hostname: h-srv-ws
+        environment:
+            PORT: 80

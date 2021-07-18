@@ -1,0 +1,17 @@
+#ErrorDocument 502 "Destination service is unavailable."
+#ErrorDocument 410 "Resource is not available anymore."
+#ErrorDocument 404 "Page %{REQUEST_URI} not found."
+#Header always set Docker-Rewrite-Proxy 1
+
+# Rules
+RewriteCond %{HTTP_HOST} api\.example2.localhost
+RewriteRule .* "%{REQUEST_SCHEME}://apicontainername%{REQUEST_URI}" [P,QSA,L]
+
+RewriteCond %{HTTP_HOST} search\.example2.localhost
+RewriteRule .* "%{REQUEST_SCHEME}://elasticsearch:9200%{REQUEST_URI}" [P,QSA,L]
+
+RewriteCond %{HTTP_HOST} example\.example2.localhost
+RewriteRule .* "%{REQUEST_SCHEME}://wordpress%{REQUEST_URI}" [P,QSA,L]
+
+# Block defaults
+# RewriteRule .* - [R=404,L]
