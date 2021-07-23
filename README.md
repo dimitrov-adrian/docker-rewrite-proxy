@@ -5,13 +5,6 @@
 
 By default, every domain will be proxied by its SLD to a container resolved by this name (could be compose servise name or hostname). For development needs, it is good and ease practice to use .localhost as most of the browsers already handles it and resolving it to _127.0.0.1_
 
-Technically the rule is:
-
-```apache
-RewriteCond %{HTTP_HOST} "^(?:.*\.)?(.*)\.[a-zA-Z0-9]+(?::\d+)?$"
-RewriteRule .* "http://%1%{REQUEST_URI}" [P,QSA,L]
-```
-
 Which handles next examples as:
 
 `example.localhost` -> `example`
@@ -19,6 +12,15 @@ Which handles next examples as:
 `sub2.sub1.example.localhost` -> `example`
 
 `sub2.sub1.example2com.com` -> `example2com`
+
+And technically the rule behind is:
+
+```apache
+RewriteCond %{HTTP_HOST} "^(?:.*\.)?(.*)\.[a-zA-Z0-9]+(?::\d+)?$"
+RewriteRule .* "http://%1%{REQUEST_URI}" [P,QSA,L]
+```
+
+See `REWRITE_9000` env variable
 
 ## Supported Protocols:
 
@@ -75,7 +77,7 @@ services:
             REWRITE_1: 'blog wp\d+\.example\.com'
             REWRITE_2: 'blog vlog\.example\.com'
             REWRITE_100: 'image .*img\.example.com'
-            REWRITE_101: 'image cdn\.example.com'
+            REWRITE_101: 'http://image:80 cdn\.example.com'
             REWRITE_900: "blog .*"
     blog:
         image: wordpress
