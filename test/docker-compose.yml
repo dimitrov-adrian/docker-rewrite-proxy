@@ -22,6 +22,7 @@ services:
             SERVER_INFO_ENDPOINT: "/.server/info"
             SERVER_STATUS_ENDPOINT: "/.server_status"
             ENABLE_JSON_LOG: 1
+            ENABLE_HTTP2: 1
         volumes:
             - "../rootfs/etc/apache2/httpd.conf:/etc/apache2/httpd.conf"
             - "../rootfs/var/www/ssl:/var/www/ssl"
