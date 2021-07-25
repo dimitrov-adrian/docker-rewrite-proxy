@@ -40,6 +40,10 @@ See `REWRITE_9000` env variable
     (defaults to `%1 (?:.*\.)?(.*)\.[a-zA-Z0-9]+`)\
     _you can disable it by set to empty_
 
+-   `TRUSTED_PROXIES` Set apache2 remote_ip proxy list (defaults to `10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8`
+
+-   `ENABLE_HTTP2` Enables http2 handler (defaults to `1`)
+
 -   `TZ` - Set time zone (defaults to `UTC`)
 
 -   `APACHE_TIMEOUT` Sets the apache's timeout (defaults to `60`)

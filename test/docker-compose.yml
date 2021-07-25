@@ -9,6 +9,7 @@ services:
             - "${HTTPS_PORT}:443"
         environment:
             TZ: GMT
+            REWRITE_05: 'web1 \d+\.\d+\.\d+\.\d+'
             REWRITE_11: 'web1 bew1\.example\.com'
             REWRITE_12: 'web1 bew[a-z]+\.example\.com'
             REWRITE_13: 'http://web1 bew\.example\..*'
