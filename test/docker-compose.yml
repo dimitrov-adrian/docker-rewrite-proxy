@@ -20,10 +20,11 @@ services:
             REWRITE_100: "fallback fall back"
             REWRITE_8000: "fallback z.*"
             REWRITE_9001: "fallback .*"
+            REWRITE_8999: "mtest .*mtest\\."
             SERVER_INFO_ENDPOINT: "/.server/info"
             SERVER_STATUS_ENDPOINT: "/.server_status"
-            ENABLE_JSON_LOG: 1
-            ENABLE_HTTP2: 1
+            ENABLE_JSON_LOG: "off"
+            ENABLE_HTTP2: "on"
         volumes:
             - "../rootfs/etc/apache2/httpd.conf:/etc/apache2/httpd.conf"
             - "../rootfs/var/www/ssl:/var/www/ssl"
@@ -31,18 +32,11 @@ services:
             - "./.htaccess:/var/www/proxy/.htaccess"
         extra_hosts:
             - "host.docker.internal:host-gateway"
-    web1:
-        image: nginxdemos/hello:plain-text
-        hostname: "web-1"
-    web2:
-        image: nginxdemos/hello:plain-text
-        hostname: "web-2"
-    web3:
-        image: nginxdemos/hello:plain-text
-        hostname: "web-3"
-    fallback:
-        image: nginxdemos/hello:plain-text
-        hostname: "fallback"
+    mtest:
+        image: php:cli-alpine
+        command: php -S 0.0.0.0:80 /index.php
+        volumes:
+            - "./index.php:/index.php:ro,cached"
     websocketecho:
         image: jmalloc/echo-server
         hostname: "ws-server"

@@ -42,7 +42,7 @@ See `REWRITE_9000` env variable
 
 -   `TRUSTED_PROXIES` Set apache2 remote_ip proxy list (defaults to `10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8`
 
--   `ENABLE_HTTP2` Enables http2 handler (defaults to `1`)
+-   `ENABLE_HTTP2` Enables http2 handler (defaults to `on`)
 
 -   `TZ` - Set time zone (defaults to `UTC`)
 
@@ -52,7 +52,7 @@ See `REWRITE_9000` env variable
 
 -   `SERVER_STATUS_ENDPOINT` Set endpoint for apache's mod_status, or disable if empty (disabled by default) **leadslash is required**
 
--   `ENABLE_JSON_LOG` Enables JSON output of the container (defaults disabled)
+-   `ENABLE_JSON_LOG` Enables JSON output of the container (defaults `off`)
 
 ## Docker Compose Example
 
