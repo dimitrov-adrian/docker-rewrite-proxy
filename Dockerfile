@@ -16,6 +16,7 @@ ENV TZ=UTC \
     SERVER_STATUS_ENDPOINT= \
     ENABLE_JSON_LOG="off" \
     ENABLE_HTTP2="on" \
+    APACHE_MAX_FORWARDS=15 \
     TRUSTED_PROXIES="10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8"
 
 CMD ["sh", "/docker-entrypoint.sh"]

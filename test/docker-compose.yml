@@ -9,22 +9,25 @@ services:
             - "${HTTPS_PORT}:443"
         environment:
             TZ: GMT
-            REWRITE_05: 'web1 \d+\.\d+\.\d+\.\d+'
-            REWRITE_11: 'web1 bew1\.example\.com'
-            REWRITE_12: 'web1 bew[a-z]+\.example\.com'
+            REWRITE_03: '127.0.0.2  self\.localhost'
+            REWRITE_05: 'web1				\d+\.\d+\.\d+\.\d+'
+            REWRITE_11: 'web1				bew1\.example\.com'
+            REWRITE_12: 'web1				bew[a-z]+\.example\.com'
             REWRITE_13: 'http://web1 bew\.example\..*'
             REWRITE_14: 'web1:80 bew\w+\.example\..*'
-            REWRITE_50: "websocketecho\tws.*"
+            REWRITE_50: "\twebsocketecho\t     ws.*"
             REWRITE_90: "web1"
             REWRITE_92: "%1 directhost-([^:]+)"
-            REWRITE_100: "fallback fall back"
-            REWRITE_8000: "fallback z.*"
+            REWRITE_100: "  fallback fall	   	back"
+            REWRITE_200: "fcgi://phpfpm:9000/var/www/html		zfpm.*"
+            REWRITE_8000: "     fallback                \tz.*"
             REWRITE_9001: "fallback .*"
             REWRITE_8999: "mtest .*mtest\\."
             SERVER_INFO_ENDPOINT: "/.server/info"
             SERVER_STATUS_ENDPOINT: "/.server_status"
             ENABLE_JSON_LOG: "off"
             ENABLE_HTTP2: "on"
+            APACHE_MAX_FORWARDS: 3
         volumes:
             - "../rootfs/etc/apache2/httpd.conf:/etc/apache2/httpd.conf"
             - "../rootfs/var/www/ssl:/var/www/ssl"
@@ -37,6 +40,10 @@ services:
         command: php -S 0.0.0.0:80 /index.php
         volumes:
             - "./index.php:/index.php:ro,cached"
+    phpfpm:
+        image: php:fpm-alpine3.14
+        volumes:
+            - "./:/var/www/html:ro,cached"
     websocketecho:
         image: jmalloc/echo-server
         hostname: "ws-server"

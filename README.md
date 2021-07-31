@@ -27,9 +27,6 @@ See `REWRITE_9000` env variable
 -   HTTP (http, https)
 -   WebSocket (ws, wss)
 -   FastCGI (fcgi)
--   SCGI (scgi)
--   AJP (ajp)
--   FTP (ftp)
 
 ## Environment Variables
 
@@ -48,11 +45,13 @@ See `REWRITE_9000` env variable
 
 -   `APACHE_TIMEOUT` Sets the apache's timeout (defaults to `60`)
 
+-   `APACHE_MAX_FORWARDS` Set the apache's max proxy forwards (defaults to `15`)
+
 -   `SERVER_INFO_ENDPOINT` Set endpoint for apache's mod_info, or disable if empty (disabled by default) **leadslash is required**
 
 -   `SERVER_STATUS_ENDPOINT` Set endpoint for apache's mod_status, or disable if empty (disabled by default) **leadslash is required**
 
--   `ENABLE_JSON_LOG` Enables JSON output of the container (defaults `off`)
+-   `ENABLE_JSON_LOG` Enables JSON output of the container (defaults to `off`)
 
 ## Docker Compose Example
 
