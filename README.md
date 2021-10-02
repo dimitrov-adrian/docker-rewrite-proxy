@@ -43,13 +43,23 @@ See `REWRITE_9000` env variable
 
 -   `TZ` - Set time zone (defaults to `UTC`)
 
+-   `HOSTNAME` - Set hostname (docker builtin)
+
 -   `APACHE_TIMEOUT` Sets the apache's timeout (defaults to `60`)
 
 -   `APACHE_MAX_FORWARDS` Set the apache's max proxy forwards (defaults to `15`)
 
--   `SERVER_INFO_ENDPOINT` Set endpoint for apache's mod_info, or disable if empty (disabled by default) **leadslash is required**
+-   `SERVER_INFO_ENDPOINT` Set endpoint for apache's mod_info, or disable if empty (defaults to empy) **leadslash is required**
 
--   `SERVER_STATUS_ENDPOINT` Set endpoint for apache's mod_status, or disable if empty (disabled by default) **leadslash is required**
+-   `SERVER_STATUS_ENDPOINT` Set endpoint for apache's mod_status, or disable if empty (defaults to empy) **leadslash is required**
+
+-   `SERVER_ADMIN` Set server's admin email (defaults to `admin@localhost`)
+
+-   `ENABLE_ACME` Enable apache's mod_md for auto letsencrypt ssl (defaults to disabled)
+
+-   `ACME_DOMAINS` Space separated list of domains to issue ACME certificate
+
+-   `ACME_AUTHORITY` Defaults authority (defaults to https://acme-v02.api.letsencrypt.org/directory)
 
 -   `ENABLE_JSON_LOG` Enables JSON output of the container (defaults to `off`)
 
@@ -73,8 +83,8 @@ services:
             # - ./.htaccess:/var/www/proxy/.htaccess
         environment:
             TZ: GMT
-            SERVER_INFO_ENDPOINT: "/.server/info"
-            SERVER_STATUS_ENDPOINT: "/.server/status"
+            SERVER_INFO_ENDPOINT: "/.httpd/info"
+            SERVER_STATUS_ENDPOINT: "/.httpd/status"
             ENABLE_JSON_LOG: 1
 
             REWRITE_1: 'blog wp\d+\.example\.com'
@@ -82,6 +92,11 @@ services:
             REWRITE_100: 'image .*img\.example.com'
             REWRITE_101: 'http://image:80 cdn\.example.com'
             REWRITE_900: "blog .*"
+
+            SERVER_ADMIN: 'JohnDoe@example.com'
+            ENABLE_ACME: 1
+            ACME_DOMAINS: 'vlog.example.com wp.example.com'
+            ACME_AUTHORITY: 'https://acme-staging-v02.api.letsencrypt.org/directory'
     blog:
         image: wordpress
     images:

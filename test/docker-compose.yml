@@ -23,7 +23,7 @@ services:
             REWRITE_8000: "     fallback                \tz.*"
             REWRITE_9001: "fallback .*"
             REWRITE_8999: "mtest .*mtest\\."
-            SERVER_INFO_ENDPOINT: "/.server/info"
+            SERVER_INFO_ENDPOINT: "/.httpd/info"
             SERVER_STATUS_ENDPOINT: "/.server_status"
             ENABLE_JSON_LOG: "off"
             ENABLE_HTTP2: "on"

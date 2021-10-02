@@ -43,6 +43,10 @@ if [ -n "$SERVER_INFO_ENDPOINT" ]; then
     HTTPD_ARGS="$HTTPD_ARGS -DSERVER_INFO_ENDPOINT"
 fi
 
+if [ -n "$ENABLE_ACME" ] && [ "$ACME_DOMAINS" != "" ]; then
+    HTTPD_ARGS="$HTTPD_ARGS -DENABLE_ACME"
+fi
+
 if [ "$ENABLE_HTTP2" == "1" ] || [ "$ENABLE_HTTP2" == "true" ] || [ "$ENABLE_HTTP2" == "on" ]; then
     HTTPD_ARGS="$HTTPD_ARGS -DENABLE_HTTP2"
 fi
