@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.14
 
 RUN \
     echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
@@ -22,7 +22,7 @@ ENV TZ=UTC \
     APACHE_MAX_FORWARDS=15 \
     SERVER_ADMIN="admin@localhost" \
     ENABLE_ACME= \
-    ACME_DOMAINS="" \
+    ACME_DOMAINS= \
     ACME_AUTHORITY="https://acme-v02.api.letsencrypt.org/directory" \
     TRUSTED_PROXIES="10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8"
 
