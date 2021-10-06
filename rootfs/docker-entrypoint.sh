@@ -16,16 +16,16 @@ printenv | grep '^REWRITE_' | sort -fibn -t'_' -k2 | while read -r rule; do
     if [[ $dst =~ '^\w+://.+' ]]; then
         # Handle custom protocol
         echo "
-        RewriteCond %{HTTP_HOST} \"^$src(?::\d+)\$\" [NC]
+        RewriteCond %{HTTP_HOST} \"^$src(?::\d+)?\$\" [NC]
         RewriteRule .* \"$dst%{REQUEST_URI}\" [P,QSA,NS,L]" >> /etc/apache2/rewrite-env-rules.conf
     else
         # Handle http/ws by default
         echo "
         RewriteCond %{HTTP:Connection} Upgrade [NC]
         RewriteCond %{HTTP:Upgrade} websocket [NC]
-        RewriteCond %{HTTP_HOST} \"^$src(?::\d+)\$\" [NC]
+        RewriteCond %{HTTP_HOST} \"^$src(?::\d+)?\$\" [NC]
         RewriteRule .* \"ws://$dst%{REQUEST_URI}\" [P,QSA,NS,L]
-        RewriteCond %{HTTP_HOST} \"^$src(?::\d+)\$\" [NC]
+        RewriteCond %{HTTP_HOST} \"^$src(?::\d+)?\$\" [NC]
         RewriteRule .* \"http://$dst%{REQUEST_URI}\" [P,QSA,NS,L]" >> /etc/apache2/rewrite-env-rules.conf
     fi
 done

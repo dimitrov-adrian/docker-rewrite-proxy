@@ -91,7 +91,8 @@ services:
             REWRITE_2: 'blog vlog\.example\.com'
             REWRITE_100: 'image .*img\.example.com'
             REWRITE_101: 'http://image:80 cdn\.example.com'
-            REWRITE_900: "blog .*"
+            REWRITE_8999: "blog .*\.example-only.com"
+            REWRITE_9000: "blog example-only.com"
 
             SERVER_ADMIN: 'JohnDoe@example.com'
             ENABLE_ACME: 1
