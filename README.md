@@ -16,8 +16,8 @@ Which handles next examples as:
 And technically the rule behind is:
 
 ```apache
-RewriteCond %{HTTP_HOST} "^(?:.*\.)?(.*)\.[a-zA-Z0-9]+(?::\d+)?$"
-RewriteRule .* "http://%1%{REQUEST_URI}" [P,QSA,L]
+RewriteCond %{HTTP_HOST} "^(.*\.)?(.*)\.\w+(?::\d+)?$"
+RewriteRule .* "http://%2%{REQUEST_URI}" [P,QSA,L]
 ```
 
 See `REWRITE_9000` env variable
@@ -34,10 +34,10 @@ See `REWRITE_9000` env variable
     Format: `<destination> <hostname regex pattern>`.
 
 -   `REWRITE_9000` Presets **default proxy rule** with priority 9000 \
-    (defaults to `%1 (?:.*\.)?(.*)\.[a-zA-Z0-9]+`)\
+    (defaults to `%1 (.*\.)?(.*)\.\w+`)\
     _you can disable it by set to empty_
 
--   `TRUSTED_PROXIES` Set apache2 remote_ip proxy list (defaults to `10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8`
+-   `TRUSTED_PROXIES` Set apache2 remote_ip proxy list (defaults to `10.0.0.0/8 100.64.0.0/10 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8`
 
 -   `ENABLE_HTTP2` Enables http2 handler (defaults to `on`)
 
@@ -87,6 +87,7 @@ services:
             SERVER_STATUS_ENDPOINT: "/.httpd/status"
             ENABLE_JSON_LOG: 1
 
+            # Rules container <- domain pattern
             REWRITE_1: 'blog wp\d+\.example\.com'
             REWRITE_2: 'blog vlog\.example\.com'
             REWRITE_100: 'image .*img\.example.com'

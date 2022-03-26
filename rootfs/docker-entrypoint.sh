@@ -11,6 +11,12 @@ printenv | grep '^REWRITE_' | sort -fibn -t'_' -k2 | while read -r rule; do
 
     if [ -z "$src" ] || [ -z "$dst" ]; then continue; fi
 
+    if [ $ENABLE_JSON_LOG == "1" ] || [ "$ENABLE_JSON_LOG" == "true" ] || [ "$ENABLE_JSON_LOG" == "on" ]; then
+        echo "{\"type\":\"info\",\"time\":\"$(date +'%F %T.%s' | cut -c-26)\",\"sender\":\"rewrite_proxy\",\"from\":\"$src\",\"to\":\"$dst\"}"
+    else
+        echo "[$(date +'%F %T.%s' | cut -c-26)] -:rewrite_proxy:${ruleid##*_} $src -> $dst"
+    fi
+
     echo "
     # ${ruleid##*_} TO: $dst FROM: $src" >> /etc/apache2/rewrite-env-rules.conf
     if [[ $dst =~ '^\w+://.+' ]]; then
@@ -56,4 +62,4 @@ if [ "$ENABLE_JSON_LOG" == "1" ] || [ "$ENABLE_JSON_LOG" == "true" ] || [ "$ENAB
 fi
 
 rm -f /usr/local/apache2/logs/httpd.pid
-exec httpd -DFOREGROUND $HTTPD_ARGS -f /etc/apache2/httpd.conf
+exec httpd -DFOREGROUND -T $HTTPD_ARGS -f /etc/apache2/httpd.conf

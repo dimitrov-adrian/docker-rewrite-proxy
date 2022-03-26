@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.15
 
 RUN \
     echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
@@ -14,7 +14,7 @@ EXPOSE 80/tcp 443/tcp
 
 ENV TZ=UTC \
     APACHE_TIMEOUT=60 \
-    REWRITE_9000="%1 (?:.*\.)?(.*)\.[a-zA-Z0-9]+" \
+    REWRITE_9000="%1 (?:.*\\.)?(.*)\\.\\w+" \
     SERVER_INFO_ENDPOINT= \
     SERVER_STATUS_ENDPOINT= \
     ENABLE_JSON_LOG="off" \
@@ -24,6 +24,6 @@ ENV TZ=UTC \
     ENABLE_ACME= \
     ACME_DOMAINS= \
     ACME_AUTHORITY="https://acme-v02.api.letsencrypt.org/directory" \
-    TRUSTED_PROXIES="10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8"
+    TRUSTED_PROXIES="10.0.0.0/8 100.64.0.0/10 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8"
 
 CMD ["sh", "/docker-entrypoint.sh"]
