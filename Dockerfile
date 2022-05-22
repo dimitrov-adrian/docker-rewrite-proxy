@@ -20,6 +20,7 @@ ENV TZ=UTC \
     ENABLE_JSON_LOG="off" \
     ENABLE_HTTP2="on" \
     APACHE_MAX_FORWARDS=15 \
+    ENABLE_DEFLATE="on" \
     SERVER_ADMIN="admin@localhost" \
     ENABLE_ACME= \
     ACME_DOMAINS= \

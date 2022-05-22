@@ -53,6 +53,8 @@ See `REWRITE_9000` env variable
 
 -   `SERVER_STATUS_ENDPOINT` Set endpoint for apache's mod_status, or disable if empty (defaults to empy) **leadslash is required**
 
+-   `ENABLE_DEFLATE` Enables deflate (defaults to `on`)
+
 -   `SERVER_ADMIN` Set server's admin email (defaults to `admin@localhost`)
 
 -   `ENABLE_ACME` Enable apache's mod_md for auto letsencrypt ssl (defaults to disabled)

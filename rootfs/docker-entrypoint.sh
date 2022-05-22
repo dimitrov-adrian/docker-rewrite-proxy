@@ -49,7 +49,11 @@ if [ -n "$SERVER_INFO_ENDPOINT" ]; then
     HTTPD_ARGS="$HTTPD_ARGS -DSERVER_INFO_ENDPOINT"
 fi
 
-if [ -n "$ENABLE_ACME" ] && [ "$ACME_DOMAINS" != "" ]; then
+if [ "$ENABLE_DEFLATE" == "1" ] || [ "$ENABLE_DEFLATE" == "true" ] || [ "$ENABLE_DEFLATE" == "on" ]; then
+    HTTPD_ARGS="$HTTPD_ARGS -DENABLE_DEFLATE"
+fi
+
+if [ "$ACME_DOMAINS" != "" ] && ( [ "$ENABLE_ACME" == "1" ] || [ "$ENABLE_ACME" == "true" ] || [ "$ENABLE_ACME" == "on" ] ); then
     HTTPD_ARGS="$HTTPD_ARGS -DENABLE_ACME"
 fi
 
