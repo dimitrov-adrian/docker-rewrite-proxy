@@ -1,7 +1,7 @@
-FROM alpine:3.15
+FROM alpine:3.17
 
 RUN \
-    echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+    echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk add --no-cache apache2 apache2-ssl apache2-http2 apache2-proxy apache-mod-md tzdata \
     && rm -rf /var/www/localhost /etc/apache2/conf.d/* \
     && mkdir -p /var/www/proxy && chown apache:apache /var/www/proxy
@@ -14,7 +14,6 @@ EXPOSE 80/tcp 443/tcp
 
 ENV TZ=UTC \
     APACHE_TIMEOUT=60 \
-    REWRITE_9000="%1 (?:.*\\.)?(.*)\\.\\w+" \
     SERVER_INFO_ENDPOINT= \
     SERVER_STATUS_ENDPOINT= \
     ENABLE_JSON_LOG="off" \

@@ -1,26 +1,17 @@
-> DISCLAIMER: This image is aimed for testing environments, it is discouraged to use in production environments, or at least with the default settings.
-> For production purposes go with [traefik](https://traefik.io/)
+> DISCLAIMER: This image is aimed for testing environments, it is discouraged to use in production environments, or at
+> least with the default settings. For production purposes go with [traefik](https://traefik.io/)
 
 ## Default Proxy Rule
 
-By default, every domain will be proxied by its SLD to a container resolved by this name (could be compose servise name or hostname). For development needs, it is good and ease practice to use .localhost as most of the browsers already handles it and resolving it to _127.0.0.1_
+By default (if **not set** any `REWRITE_*`), every domain will be proxied by its SLD to a container resolved by this
+name (could be compose service name or hostname). For development needs, it's a good practice to use .localhost as most
+of the browsers already handles it and resolving it to `127.0.0.1`
 
-Which handles next examples as:
+Examples:
 
-`example.localhost` -> `example`
-
-`sub2.sub1.example.localhost` -> `example`
-
-`sub2.sub1.example2com.com` -> `example2com`
-
-And technically the rule behind is:
-
-```apache
-RewriteCond %{HTTP_HOST} "^(.*\.)?(.*)\.\w+(?::\d+)?$"
-RewriteRule .* "http://%2%{REQUEST_URI}" [P,QSA,L]
-```
-
-See `REWRITE_9000` env variable
+-   `example.localhost` -> `example`
+-   `sub2.sub1.example.localhost` -> `example`
+-   `sub2.sub1.example2com.com` -> `example2com`
 
 ## Supported Protocols:
 
@@ -31,13 +22,12 @@ See `REWRITE_9000` env variable
 ## Environment Variables
 
 -   `REWRITE_<PRIORITY>` Add proxy rewrite rule from environment variables. \
-    Format: `<destination> <hostname regex pattern>`.
+    Format: `<destination> <hostname regex pattern>`. \
+    \
+    **NOTE: whenever rewrite variable is set, the default rule is disabled.**
 
--   `REWRITE_9000` Presets **default proxy rule** with priority 9000 \
-    (defaults to `%1 (.*\.)?(.*)\.\w+`)\
-    _you can disable it by set to empty_
-
--   `TRUSTED_PROXIES` Set apache2 remote_ip proxy list (defaults to `10.0.0.0/8 100.64.0.0/10 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8`
+-   `TRUSTED_PROXIES` Set apache2 remote_ip proxy list (defaults to
+    `10.0.0.0/8 100.64.0.0/10 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 127.0.0.0/8`
 
 -   `ENABLE_HTTP2` Enables http2 handler (defaults to `on`)
 
@@ -49,9 +39,11 @@ See `REWRITE_9000` env variable
 
 -   `APACHE_MAX_FORWARDS` Set the apache's max proxy forwards (defaults to `15`)
 
--   `SERVER_INFO_ENDPOINT` Set endpoint for apache's mod_info, or disable if empty (defaults to empy) **leadslash is required**
+-   `SERVER_INFO_ENDPOINT` Set endpoint for apache's mod_info, or disable if empty (defaults to empy) **leadslash is
+    required**
 
--   `SERVER_STATUS_ENDPOINT` Set endpoint for apache's mod_status, or disable if empty (defaults to empy) **leadslash is required**
+-   `SERVER_STATUS_ENDPOINT` Set endpoint for apache's mod_status, or disable if empty (defaults to empy) **leadslash is
+    required**
 
 -   `ENABLE_DEFLATE` Enables deflate (defaults to `on`)
 
@@ -67,7 +59,8 @@ See `REWRITE_9000` env variable
 
 ## Docker Compose Example
 
-Take in mind that the proxy container must see target containers in the network. You could use user defined networks and network aliases for that purpose.
+Take in mind that the proxy container must see target containers in the network. You could use user defined networks and
+network aliases for that purpose.
 
 ```yaml
 # docker-compose.yml
@@ -127,7 +120,8 @@ It is `/var/www/proxy`
 
 ### How to use custom certificate
 
-You could download [mkcert](https://github.com/FiloSottile/mkcert/releases) and generate own certificate and install on your system.
+You could download and use [mkcert](https://github.com/FiloSottile/mkcert/releases), to generate your own certificate
+and install them on your system.
 
 ```bash
 ./mkcert-v1.4.3-darwin-amd64 \
@@ -149,19 +143,11 @@ volumes:
 
 Because there is no certificate for localhost.
 
-### How the self-signed certificates are generated then?
-
-It is used the same method with mkcert, and the exact command used is:
-
-```bash
-mkcert \
-    -cert-file rootfs/var/www/ssl/localhost.pem \
-    -key-file rootfs/var/www/ssl/localhost.key \
-    'localhost' '*.localhost' '*.local' '*.loc' '*.dock' '*.docker' '127.0.0.1' '::1'
-```
-
 ### Why this container?
 
-There is plenty of other options (traefik, caddy, ... etc.), but I found this way, the most ease to setup for my needs. All of the most popular alternatives are probably more performant for production needs, but for local dev environment I do not need most CPU/MEM performant, but something that will save me a time, and potentialy for other people too.
+There is plenty of other options (traefik, caddy, ... etc.), but I found this way, the most ease to setup for my needs.
+All of the most popular alternatives are probably more performant for production needs, but for local dev environment I
+do not need most CPU/MEM performant, but something that will save me a time, and potentialy for other people too.
 
-Since the Apache is one of the most used web servers, most of webdevs area already aware of mod_rewrite, so will be ease to use and modify with no learning curve.
+Since the Apache is one of the most used web servers, most of web devs are already aware of mod_rewrite, so will be ease
+to use and modify with no learning curve.
