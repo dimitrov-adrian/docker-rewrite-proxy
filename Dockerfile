@@ -4,7 +4,8 @@ RUN \
     echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk add --no-cache apache2 apache2-ssl apache2-http2 apache2-proxy apache-mod-md tzdata \
     && rm -rf /var/www/localhost /etc/apache2/conf.d/* \
-    && mkdir -p /var/www/proxy && chown apache:apache /var/www/proxy
+    && mkdir -p /var/www/proxy && chown apache:apache /var/www/proxy \
+    && ln -s /etc/apache2/ssl /var/www/ssl
 
 ADD rootfs /
 

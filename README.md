@@ -1,5 +1,5 @@
 > DISCLAIMER: This image is aimed for testing environments, it is discouraged to use in production environments, or at
-> least with the default settings. For production purposes go with [traefik](https://traefik.io/)
+> least with the default settings. For production purposes go with [traefik](https://traefik.io/) or [caddy](https://caddyserver.com/)
 
 ## Default Proxy Rule
 
@@ -146,8 +146,7 @@ Because there is no certificate for localhost.
 ### Why this container?
 
 There is plenty of other options (traefik, caddy, ... etc.), but I found this way, the most ease to setup for my needs.
-All of the most popular alternatives are probably more performant for production needs, but for local dev environment I
-do not need most CPU/MEM performant, but something that will save me a time, and potentialy for other people too.
+All of the most popular alternatives are probably more performant for production needs, but for local dev environment I do not need most CPU/MEM performant, but something that will save me a time.
 
 Since the Apache is one of the most used web servers, most of web devs are already aware of mod_rewrite, so will be ease
 to use and modify with no learning curve.
