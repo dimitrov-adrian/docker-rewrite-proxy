@@ -1,8 +1,7 @@
-version: "2.4"
+version: "3.2"
 
 services:
     proxy:
-        restart: unless-stopped
         build: ../
         ports:
             - "${HTTP_PORT}:80"
@@ -25,12 +24,10 @@ services:
             REWRITE_8999: "mtest .*mtest\\."
             SERVER_INFO_ENDPOINT: "/.httpd/info"
             SERVER_STATUS_ENDPOINT: "/.server_status"
-            ENABLE_JSON_LOG: "off"
             ENABLE_HTTP2: "on"
             APACHE_MAX_FORWARDS: 3
         volumes:
             - "../rootfs/etc/apache2/httpd.conf:/etc/apache2/httpd.conf"
-            - "../rootfs/var/www/ssl:/var/www/ssl"
             - "../rootfs/docker-entrypoint.sh:/docker-entrypoint.sh"
             - "./.htaccess:/var/www/proxy/.htaccess"
         extra_hosts:

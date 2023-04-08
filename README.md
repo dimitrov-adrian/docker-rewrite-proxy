@@ -55,7 +55,7 @@ Examples:
 
 -   `ACME_AUTHORITY` Defaults authority (defaults to https://acme-v02.api.letsencrypt.org/directory)
 
--   `ENABLE_JSON_LOG` Enables JSON output of the container (defaults to `off`)
+-   `STRICT_TRANSPORT_SECURITY` Sets the `Strict-Transport-Security` header (defaults to `max-age=0`)
 
 ## Docker Compose Example
 
@@ -80,7 +80,6 @@ services:
             TZ: GMT
             SERVER_INFO_ENDPOINT: "/.httpd/info"
             SERVER_STATUS_ENDPOINT: "/.httpd/status"
-            ENABLE_JSON_LOG: 1
 
             # Rules container <- domain pattern
             REWRITE_1: 'blog wp\d+\.example\.com'
@@ -112,7 +111,6 @@ Then you could do:
 
 -   Alpine
 -   Apache 2.4 (mod_rewrite, mod_proxy, mod_ssl)
--   Self signed certificate for localhost
 
 ### Where is the apache's DocumentRoot?
 
@@ -121,19 +119,10 @@ It is `/var/www/proxy`
 ### How to use custom certificate
 
 You could download and use [mkcert](https://github.com/FiloSottile/mkcert/releases), to generate your own certificate
-and install them on your system.
-
-```bash
-./mkcert-v1.4.3-darwin-amd64 \
-    -install \
-    -cert-file=localhost.pem \
-    -key-file=localhost.key \
-    'example.com' 'myapp.dev' 'localhost' '127.0.0.1' '::1'
-```
+and install them on your system, then you could mount them into `/var/www/ssl/localhost.pem` and `/var/www/ssl/localhost.key`
 
 ```yaml
 # docker-compose.yml
-
 volumes:
     - "./localhost.pem:/var/www/ssl/localhost.pem"
     - "./localhost.key:/var/www/ssl/localhost.key"

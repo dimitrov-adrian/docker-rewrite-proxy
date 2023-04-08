@@ -16,11 +16,7 @@ printenv | grep '^REWRITE_' | sort -fibn -t'_' -k2 | while read -r rule; do
     if [ -z "$src" ] || [ -z "$dst" ]; then continue; fi
 
     time=$(date +'%F %T.%s' | cut -c-26)
-    if [ $ENABLE_JSON_LOG == "1" ] || [ "$ENABLE_JSON_LOG" == "true" ] || [ "$ENABLE_JSON_LOG" == "on" ]; then
-        echo "{\"type\":\"info\",\"time\":\"$time\",\"sender\":\"PROXY\",\"from\":\"$src\",\"to\":\"$dst\"}"
-    else
-        echo "[$time] -:PROXY:${ruleid} $src -> $dst"
-    fi
+    echo "[$time] -:PROXY:${ruleid} $src -> $dst"
 
     echo "
     # ${ruleid} TO: $dst FROM: $src" >> /etc/apache2/rewrite-env-rules.conf
@@ -66,18 +62,19 @@ if [ "$ENABLE_HTTP2" == "1" ] || [ "$ENABLE_HTTP2" == "true" ] || [ "$ENABLE_HTT
     HTTPD_ARGS="$HTTPD_ARGS -DENABLE_HTTP2"
 fi
 
-if [ "$ENABLE_JSON_LOG" == "1" ] || [ "$ENABLE_JSON_LOG" == "true" ] || [ "$ENABLE_JSON_LOG" == "on" ]; then
-    HTTPD_ARGS="$HTTPD_ARGS -DENABLE_JSON_LOG"
-fi
-
-mkdir -m 0755 -p "/var/www/ssl"
-
-if [ ! -f "/var/www/ssl/localhost.pem" ]; then
-    cp -fv "/etc/apache2/ssl/localhost.pem" "/var/www/ssl/localhost.pem"
-fi
-
-if [ ! -f "/var/www/ssl/localhost.key" ]; then
-    cp -fv "/etc/apache2/ssl/localhost.key" "/var/www/ssl/localhost.key"
+if [ ! -f "/var/www/ssl/localhost.pem" ] || [ ! -f "/var/www/ssl/localhost.key" ]; then
+    echo "[$(date +'%F %T.%s' | cut -c-26)] -:openssl:notice -> Generating self-signed SSL certificate pair..."
+    mkdir -m 0755 -p "/var/www/ssl"
+    openssl req \
+        -x509 \
+        -nodes \
+        -newkey rsa:4096 \
+        -sha256 \
+        -days 1095 \
+        -keyout /var/www/ssl/localhost.key \
+        -out /var/www/ssl/localhost.pem \
+        -subj "/C=/ST=/L=/O=rewrite-proxy/OU=/CN=$(hostname)" \
+        2>/dev/null
 fi
 
 rm -f /usr/local/apache2/logs/httpd.pid
