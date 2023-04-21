@@ -1,8 +1,7 @@
 FROM alpine:3.17
 
 RUN \
-    echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-    && apk add --no-cache apache2 apache2-ssl apache2-http2 apache2-proxy apache-mod-md tzdata \
+    apk add --no-cache apache2 apache2-ssl apache2-http2 apache2-proxy apache-mod-md tzdata \
     && rm -rf /var/www/localhost /etc/apache2/conf.d/* \
     && mkdir -p /var/www/proxy && chown apache:apache /var/www/proxy
 
@@ -18,7 +17,7 @@ ENV TZ=UTC \
     SERVER_ADMIN="admin@localhost" \
     SERVER_INFO_ENDPOINT= \
     SERVER_STATUS_ENDPOINT= \
-    ENABLE_DEFLATE="on" \
+    ENABLE_DEFLATE= \
     ENABLE_HTTP2="on" \
     ENABLE_ACME= \
     ACME_DOMAINS= \
